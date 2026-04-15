@@ -33,7 +33,7 @@ class DatabaseClient {
   public async connect(): Promise<void> {
     try {
       await this.prisma.$connect();
-      logger.info('✅ Connected to PostgreSQL database');
+      logger.info('✅ Connected to database');
     } catch (error) {
       logger.error('❌ Failed to connect to database:', error);
       throw error;
