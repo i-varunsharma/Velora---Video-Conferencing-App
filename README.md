@@ -1,36 +1,241 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Velora — Video Conferencing Platform
 
-## Getting Started
+A modern, scalable video conferencing application built with WebRTC, Next.js, and TypeScript.
 
-First, run the development server:
+![Architecture](diagrams/architecture-overview.md)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🏗️ Architecture
+
+```
+velora/
+├── diagrams/       # Mermaid.js architectural diagrams
+├── backend/        # Express + Socket.io signaling server
+├── frontend/       # Next.js 16 + Tailwind CSS client
+└── README.md       # You are here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Next.js 16, React 19, Tailwind CSS 4, TypeScript |
+| **Backend** | Node.js, Express, Socket.io, TypeScript |
+| **Database** | PostgreSQL + Prisma ORM |
+| **Auth** | Clerk (SSO, JWT) |
+| **Video** | Native WebRTC (P2P mesh topology) |
+| **State** | Zustand |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Node.js** v20+ and npm
+- **PostgreSQL** v14+ (local or cloud)
+- **Clerk Account** — [clerk.com](https://clerk.com) for authentication keys
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Clone the Repository
 
-## Deploy on Vercel
+```bash
+git clone https://github.com/your-username/velora---video-conferencing-app.git
+cd velora---video-conferencing-app
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2. Set Up PostgreSQL
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Option A: Local PostgreSQL**
+
+```bash
+# macOS with Homebrew
+brew install postgresql@16
+brew services start postgresql@16
+createdb velora
+```
+
+**Option B: Cloud Database (Neon/Supabase/Railway)**
+
+Create a PostgreSQL database and note the connection URL.
+
+### 3. Backend Setup
+
+```bash
+cd backend
+
+# Install dependencies
+npm install
+
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your DATABASE_URL and Clerk keys
+
+# Generate Prisma client
+npx prisma generate
+
+# Push database schema (creates tables)
+npx prisma db push
+
+# Start development server (port 4000)
+npm run dev
+```
+
+### 4. Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Configure environment variables (already has defaults)
+# Edit .env.local if needed
+
+# Start development server (port 3000)
+npm run dev
+```
+
+### 5. Open the App
+
+1. Navigate to [http://localhost:3000](http://localhost:3000)
+2. Sign in with Clerk
+3. Create a meeting → copy the link → open in another tab → join!
+
+---
+
+## 📋 Environment Variables
+
+### Backend (`/backend/.env`)
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `PORT` | Server port | `4000` |
+| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost:5432/velora` |
+| `CLERK_SECRET_KEY` | Clerk secret key | `sk_test_...` |
+| `CLERK_PUBLISHABLE_KEY` | Clerk publishable key | `pk_test_...` |
+| `FRONTEND_URL` | Frontend origin for CORS | `http://localhost:3000` |
+
+### Frontend (`/frontend/.env.local`)
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key | `pk_test_...` |
+| `CLERK_SECRET_KEY` | Clerk secret key (for middleware) | `sk_test_...` |
+| `NEXT_PUBLIC_API_URL` | Backend API URL | `http://localhost:4000/api` |
+| `NEXT_PUBLIC_SOCKET_URL` | Backend WebSocket URL | `http://localhost:4000` |
+
+---
+
+## 📁 Project Structure
+
+### Backend
+
+```
+backend/src/
+├── index.ts                 # Express + Socket.io entry point
+├── config/                  # Database, CORS, env configuration
+├── middleware/               # Auth (Clerk JWT), error handling, validation
+├── routes/                  # REST API routes
+├── controllers/             # Request handlers
+├── services/                # Business logic layer
+├── signaling/               # WebRTC signaling server
+│   ├── socket-server.ts     # Socket.io singleton
+│   ├── room-manager.ts      # Room state (Observer pattern)
+│   └── handlers/            # Socket event handlers
+├── patterns/                # Design patterns (Factory, Singleton)
+├── types/                   # TypeScript type definitions
+└── utils/                   # Logger, ID generator
+```
+
+### Frontend
+
+```
+frontend/
+├── app/                     # Next.js App Router pages
+│   ├── (auth)/              # Sign in/up pages
+│   ├── (root)/              # Dashboard pages
+│   └── meeting/[id]/        # Video room page
+├── components/              # React components
+│   ├── VideoTile.tsx        # Video stream renderer
+│   ├── MeetingRoom.tsx      # Full meeting room UI
+│   ├── MeetingSetup.tsx     # Pre-join camera preview
+│   ├── MediaControls.tsx    # Mic/cam/share controls
+│   └── ParticipantList.tsx  # Participant sidebar
+├── hooks/                   # Custom React hooks
+│   ├── useWebRTC.ts         # WebRTC peer connections
+│   ├── useSocket.ts         # Socket.io client
+│   └── useMediaStream.ts   # Camera/mic access
+├── store/                   # Zustand state store
+└── lib/                     # API client, utilities
+```
+
+---
+
+## 🎨 Design Patterns
+
+| Pattern | Usage |
+|---------|-------|
+| **Singleton** | `DatabaseClient` — single Prisma connection pool |
+| **Singleton** | `SocketServer` — single Socket.io instance |
+| **Observer** | `RoomManager` — notifies peers of join/leave events |
+| **Factory** | `MeetingFactory` — creates different meeting types |
+| **Strategy** | `AuthStrategy` — swappable auth mechanisms |
+
+---
+
+## 🔌 API Reference
+
+### REST Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/health` | Health check |
+| `POST` | `/api/users/sync` | Sync user from Clerk |
+| `GET` | `/api/users/me` | Get current user |
+| `POST` | `/api/meetings` | Create meeting |
+| `GET` | `/api/meetings` | List user meetings |
+| `GET` | `/api/meetings/:code` | Get meeting by code |
+| `PATCH` | `/api/meetings/:id/status` | Update meeting status |
+
+### WebSocket Events
+
+| Direction | Event | Description |
+|-----------|-------|-------------|
+| C→S | `join-room` | Join a meeting room |
+| C→S | `leave-room` | Leave a meeting room |
+| C→S | `offer` | Send WebRTC offer |
+| C→S | `answer` | Send WebRTC answer |
+| C→S | `ice-candidate` | Send ICE candidate |
+| S→C | `room-users` | Existing room participants |
+| S→C | `user-joined` | New peer joined |
+| S→C | `user-left` | Peer left |
+
+---
+
+## 📊 Diagrams
+
+See the `/diagrams` directory for:
+- **Use Case Diagram** — Actor-action mapping
+- **ER Diagram** — Database schema
+- **Class Diagram** — Design patterns & SOLID principles
+- **Architecture Overview** — System topology & data flows
+
+---
+
+## 🧪 Development
+
+```bash
+# Backend type checking
+cd backend && npm run typecheck
+
+# Frontend type checking
+cd frontend && npm run typecheck
+
+# Database GUI
+cd backend && npx prisma studio
+```
+
+---
+
+## 📝 License
+
+MIT

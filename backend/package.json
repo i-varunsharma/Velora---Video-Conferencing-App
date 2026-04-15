@@ -1,0 +1,36 @@
+{
+  "name": "velora-backend",
+  "version": "1.0.0",
+  "description": "Velora Video Conferencing — Backend Signaling Server",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src/ --ext .ts",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:studio": "prisma studio",
+    "prisma:migrate": "prisma migrate dev",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@clerk/backend": "^1.0.0",
+    "@prisma/client": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "socket.io": "^4.8.0",
+    "uuid": "^11.0.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "prisma": "^6.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
