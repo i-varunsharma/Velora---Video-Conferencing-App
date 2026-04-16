@@ -2,13 +2,13 @@
 
 A modern, scalable video conferencing application built with WebRTC, Next.js, and TypeScript.
 
-![Architecture](diagrams/architecture-overview.md)
+![Architecture](Diagrams/sequenceDiagram.png)
 
 ## 🏗️ Architecture
 
 ```
 velora/
-├── diagrams/       # Mermaid.js architectural diagrams
+├── Diagrams/       # System design diagrams (UML, ERD, Sequence, Use Case)
 ├── backend/        # Express + Socket.io signaling server
 ├── frontend/       # Next.js 16 + Tailwind CSS client
 └── README.md       # You are here
@@ -213,11 +213,23 @@ frontend/
 
 ## 📊 Diagrams
 
-See the `/diagrams` directory for:
-- **Use Case Diagram** — Actor-action mapping
-- **ER Diagram** — Database schema
-- **Class Diagram** — Design patterns & SOLID principles
-- **Architecture Overview** — System topology & data flows
+The project was designed using standard system design principles. Below are the key architectural diagrams:
+
+### 1. Use Case Diagram
+Describes the actor-action mapping and features available to users.
+![Use Case Diagram](Diagrams/useCaseDiagran.png)
+
+### 2. ER Diagram (Entity-Relationship)
+Represents the database schema and relations for meetings and participants.
+![ER Diagram](Diagrams/erdiagram.jpeg)
+
+### 3. Sequence Diagram
+Demonstrates the WebRTC signaling flow and client-server interactions.
+![Sequence Diagram](Diagrams/sequenceDiagram.png)
+
+### 4. Class Diagram
+Outlines the design patterns and SOLID principles applied in the backend (e.g. Singleton, Observer, Factory).
+![Class Diagram](Diagrams/classDiagram.jpeg)
 
 ---
 
