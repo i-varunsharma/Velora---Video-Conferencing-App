@@ -23,7 +23,6 @@ velora/
 | **Database** | PostgreSQL + Prisma ORM |
 | **Auth** | Clerk (SSO, JWT) |
 | **Video** | Native WebRTC (P2P mesh topology) |
-| **State** | Zustand |
 
 ---
 
