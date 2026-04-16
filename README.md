@@ -177,7 +177,6 @@ frontend/
 | **Singleton** | `SocketServer` — single Socket.io instance |
 | **Observer** | `RoomManager` — notifies peers of join/leave events |
 | **Factory** | `MeetingFactory` — creates different meeting types |
-| **Strategy** | `AuthStrategy` — swappable auth mechanisms |
 
 ---
 
