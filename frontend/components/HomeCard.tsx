@@ -16,11 +16,11 @@ const iconMap: Record<string, LucideIcon> = {
   Video,
 };
 
-const colorMap: Record<string, { bg: string; text: string; borderHover: string }> = {
-  orange: { bg: 'bg-orange-1/20', text: 'text-orange-1', borderHover: 'hover:border-orange-1/50 hover:shadow-[0_0_15px_rgba(255,116,46,0.3)]' },
-  blue: { bg: 'bg-blue-1/20', text: 'text-blue-1', borderHover: 'hover:border-blue-1/50 hover:shadow-[0_0_15px_rgba(14,120,249,0.3)]' },
-  purple: { bg: 'bg-purple-1/20', text: 'text-purple-1', borderHover: 'hover:border-purple-1/50 hover:shadow-[0_0_15px_rgba(131,14,249,0.3)]' },
-  yellow: { bg: 'bg-yellow-1/20', text: 'text-yellow-1', borderHover: 'hover:border-yellow-1/50 hover:shadow-[0_0_15px_rgba(249,169,14,0.3)]' },
+const colorMap: Record<string, { bg: string; text: string; shadow: string; cardBg: string }> = {
+  orange: { bg: 'bg-white/20', text: 'text-white', shadow: 'shadow-[0_8px_32px_rgba(249,115,22,0.4)]', cardBg: 'bg-gradient-to-br from-orange-500 to-orange-700' },
+  blue: { bg: 'bg-white/20', text: 'text-white', shadow: 'shadow-[0_8px_32px_rgba(59,130,246,0.4)]', cardBg: 'bg-gradient-to-br from-blue-500 to-blue-700' },
+  purple: { bg: 'bg-white/20', text: 'text-white', shadow: 'shadow-[0_8px_32px_rgba(168,85,247,0.4)]', cardBg: 'bg-gradient-to-br from-purple-500 to-purple-700' },
+  yellow: { bg: 'bg-white/20', text: 'text-white', shadow: 'shadow-[0_8px_32px_rgba(234,179,8,0.4)]', cardBg: 'bg-gradient-to-br from-yellow-400 to-yellow-600' },
 };
 
 interface HomeCardProps {
@@ -39,19 +39,23 @@ const HomeCard = ({ title, description, icon, color, onClick }: HomeCardProps) =
     <button
       onClick={onClick}
       className={cn(
-        'relative flex flex-col items-start gap-4 w-full rounded-[14px] p-6 cursor-pointer group transition-all duration-300 hover:-translate-y-1 text-left overflow-hidden',
-        'bg-dark-1 border border-white/5',
-        theme.borderHover
+        'relative flex flex-col justify-between w-full min-h-[240px] rounded-[24px] p-6 md:p-7 cursor-pointer group transition-all duration-500 hover:-translate-y-2 text-left overflow-hidden border border-white/10',
+        theme.cardBg,
+        theme.shadow
       )}
       id={`home-card-${title.toLowerCase().replace(/\s/g, '-')}`}
     >
-      <div className={cn('relative flex items-center justify-center w-12 h-12 rounded-[10px] transition-all duration-300', theme.bg)}>
-        <Icon className={cn('size-6', theme.text)} />
+      {/* Floating internal gradient for that glass edge light */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      {/* The 3D Floating Icon Container - Guaranteed not to overlap with text because of flex justify-between */}
+      <div className={cn('relative flex items-center justify-center w-14 h-14 rounded-2xl transition-all duration-500 mb-6 group-hover:scale-110 group-hover:-rotate-3', theme.bg, theme.shadow)}>
+        <Icon className={cn('size-7', theme.text)} />
       </div>
 
-      <div className="relative flex flex-col gap-1 mt-2">
-        <h3 className="text-xl font-bold text-white tracking-tight">{title}</h3>
-        <p className="text-sm font-medium text-white/70">{description}</p>
+      <div className="relative flex flex-col mt-auto w-full gap-1.5">
+        <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight break-words">{title}</h3>
+        <p className="text-sm md:text-base font-medium text-white/50 group-hover:text-white/80 transition-colors duration-300 break-words">{description}</p>
       </div>
     </button>
   );

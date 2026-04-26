@@ -117,32 +117,33 @@ const Home = () => {
   })();
 
   return (
-    <section className="flex size-full flex-col gap-10 text-white max-lg:ml-0 lg:ml-[264px] pr-5">
+    <section className="flex size-full flex-col gap-8 text-white w-full">
+
       {/* Hero Banner */}
-      <div className="relative w-full rounded-[20px] overflow-hidden hero-gradient shadow-xl flex flex-col min-h-[280px]">
-        {/* Soft gradient background behind the clock is provided by hero-gradient */}
+      <div className="relative w-full rounded-[20px] overflow-hidden bg-dark-1 border border-white/5 shadow-xl flex flex-col min-h-[260px] justify-between">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 opacity-50" />
         
-        <div className="relative z-10 flex flex-col gap-8 h-full justify-between py-8 px-10 lg:py-12 lg:px-16 flex-1">
+        <div className="relative z-10 flex flex-col justify-between p-6 md:p-10 flex-1">
           <div className="flex items-start">
-            <span className="inline-flex items-center gap-2.5 py-2 px-5 bg-dark-2/40 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/10 shadow-sm">
+            <span className="inline-flex items-center gap-2 py-2 px-4 bg-dark-2/50 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/10 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               {greeting}, <span className="font-semibold text-white">{user?.firstName || 'there'}</span>
             </span>
           </div>
 
-          <div className="flex flex-col gap-2 mt-auto pt-8">
-            <h1 className="text-5xl font-extrabold lg:text-7xl text-white tracking-tighter drop-shadow-md">
+          <div className="flex flex-col gap-1 mt-8">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white tracking-tight break-words">
               {time}
             </h1>
-            <p className="text-lg font-medium text-sky-1 lg:text-xl">
+            <p className="text-base md:text-lg lg:text-xl font-medium text-sky-1 mt-1">
               {date}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Action Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pr-5 pb-5">
+      {/* Action Cards with increased top margin */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10 pb-10">
         {homeCards.map((card) => (
           <HomeCard
             key={card.title}
